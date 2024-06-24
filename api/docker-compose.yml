@@ -1,12 +1,28 @@
-api:
-  image: node:latest
-  ports:
-    - "5000:5000"
-  volumes:
-    - ./:/app/
-  working_dir: /app
-  command: npm start
+version: "3.8"  
 
-  environment:
-    - PORT=${API_PORT}
-    - DB=${API_DB}
+services:
+  
+    image: node:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/app/
+      - ./.secrets:/app/secrets:ro
+    working_dir: /app
+    command: npm start
+    environment:
+      - PORT=${API_PORT}  
+      - DB_HOST: db  
+
+  
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"  
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  
+
+#environment:
+
+volumes:
+  postgres_data: ./persistant/
